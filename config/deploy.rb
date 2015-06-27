@@ -35,8 +35,28 @@ set :deploy_to, "/srv/rails/#{fetch :application}"
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-# Bundler options
+
+#
+# Bundler Options
+#
+
+# deploy mode and use packaged gems
 set :bundle_flags, '--deployment --local'
+
+# Put the gem binaries in shared/bin after install
+set :bundle_binstubs, -> { shared_path.join('bin') }
+
+#
+# Passenger Options
+#
+
+# Find the passenger binary
+# TODO: remove hardcoded ruby; rvm1 hook not respected
+set :passenger_environment_variables, { :path => [shared_path.join('bin'), '/home/deploy/.rvm/rubies/ruby-2.2.0/bin/'].join(':') }
+
+# Butcher restart into working
+# TODO: un-gross. ; is to escape the env.
+set :passenger_restart_command, ";cd /srv/rails/checkin/current && /srv/rails/checkin/rvm1scripts/rvm-auto.sh . #{shared_path.join('bin')}/passenger-config restart-app"
 
 
 #
@@ -81,6 +101,9 @@ namespace :deploy do
       # within release_path do
       #   execute :rake, 'cache:clear'
       # end
+      within release_path do
+        execute :touch, release_path.join('tmp/restart.txt')
+      end
     end
   end
 
@@ -89,8 +112,7 @@ end
 before 'deploy', 'rvm1:install:rvm'
 before 'deploy', 'rvm1:install:ruby'
 
-before 'bundler:install', 'rvm1:hook'
-
+before 'bundler:install', 'deploy:updating'
 
 #
 # Database Tasks
@@ -107,10 +129,64 @@ namespace :db do
       end
     end
   end
+  before 'db:setup', 'bundler:install'
 
 end
 
-before 'db:setup', 'deploy:updating'
+
+#
+# Application Server (Passenger) Tasks
+#
+namespace :passenger do
+
+  desc "Check if passenger gem present"
+  task :check_gem do
+    on roles(:app) do
+      within release_path do
+        with rails_env: (fetch(:rails_env) || fetch(:stage)) do
+          execute :bundle, :show, :passenger
+        end
+      end
+    end
+  end
+
+  desc "Generate module configuration and enable module"
+  task :apache_config do
+    on roles(:app) do |h|
+      within release_path do
+        with rails_env: (fetch(:rails_env) || fetch(:stage)) do
+          execute :bundle, :exec, :ruby, "#{shared_path.join('bin')}/" +
+                                         "passenger-install-apache2-module --snippet " +
+                                         "> /tmp/passenger.load"
+          execute :sudo, :mv, "/tmp/passenger.load", "/etc/apache2/mods-available"
+          execute :sudo, :a2enmod, "passenger"
+        end
+      end
+    end
+  end
+  before 'passenger:apache_config', 'passenger:check_gem'
+  before 'passenger:apache_config', 'rvm1:hook'
+
+  desc "Build passenger"
+  task :build do
+    on roles(:app) do |h|
+      within release_path do
+        with rails_env: (fetch(:rails_env) || fetch(:stage)) do
+          run_interactively "#{shared_path.join('bin')}/passenger-install-apache2-module -a --languages ruby", h.user
+        end
+      end
+    end
+  end
+  before 'passenger:build', 'passenger:check_gem'
+
+  desc "Restart apache"
+  task :apache_restart do
+    on roles(:app) do |h|
+      execute :sudo, :service, :apache2, "restart"
+    end
+  end
+
+end
 
 
 #
@@ -118,6 +194,7 @@ before 'db:setup', 'deploy:updating'
 #
 # http://www.webascender.com/Blog/ID/577/Starting-a-Remote-Rails-Console-With-Capistrano
 namespace :rails do
+
   desc "Remote console"
   task :console do
     on roles(:app) do |h|
@@ -136,4 +213,5 @@ namespace :rails do
     info "Running `#{command}` as #{user}@#{host}"
     exec %Q(ssh #{user}@#{host} -t "bash --login -c 'cd #{fetch(:deploy_to)}/current && #{command}'")
   end
+
 end
