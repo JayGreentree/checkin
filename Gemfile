@@ -39,6 +39,9 @@ group :development do
 
   # rails specific tasks in capistrano
   gem 'capistrano-rails'
+
+  # passenger tasks in capistrano
+  gem 'capistrano-passenger'
 end
 
 group :production do
