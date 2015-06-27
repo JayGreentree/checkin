@@ -39,7 +39,12 @@ group :development do
 
   # rails specific tasks in capistrano
   gem 'capistrano-rails'
+end
 
+group :production do
+
+  # Use passenger as the application server
+  gem 'passenger'
 end
 
 group :development, :test do
