@@ -38,6 +38,10 @@ set :deploy_to, "/srv/rails/#{fetch :application}"
 # Bundler options
 set :bundle_flags, '--deployment --local'
 
+
+#
+# Retrieve Host Uptime
+#
 desc "Report uptimes"
 task :uptime do
   on roles(:all), in: :parallel do |host|
@@ -47,6 +51,9 @@ task :uptime do
 end
 
 
+#
+# Assorted Utility Tasks for Deploy
+#
 namespace :deploy do
 
   desc "Update RVM key"
@@ -85,6 +92,9 @@ before 'deploy', 'rvm1:install:ruby'
 before 'bundler:install', 'rvm1:hook'
 
 
+#
+# Database Tasks
+#
 namespace :db do
 
   desc 'Setup database'
@@ -103,6 +113,9 @@ end
 before 'db:setup', 'deploy:updating'
 
 
+#
+# Rails Console & DB Console Support
+#
 # http://www.webascender.com/Blog/ID/577/Starting-a-Remote-Rails-Console-With-Capistrano
 namespace :rails do
   desc "Remote console"
