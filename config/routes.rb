@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  get 'dashboard/index'
-
   root 'dashboard#index'
+
+  resources :sessions, only: [:create, :destroy]
+  get 'login',  to: 'sessions#create'
+  get 'logout', to: 'sessions#destroy', via: [:get, :delete]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

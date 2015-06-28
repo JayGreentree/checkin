@@ -30,6 +30,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+# CMU Person LDAP
+gem 'activeldap', :require => 'active_ldap/railtie'
+gem 'ruby-ldap'
+
+
 group :development do
   # Use Capistrano for deployment
   gem 'rvm1-capistrano3', require: false

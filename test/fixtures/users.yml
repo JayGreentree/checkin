@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  andrewid: MyString
+  dorm: MyString
+  room: MyString
+  cell_number: MyString
+  partner_id: 
+  title: MyString
+  admin: false
+
+two:
+  andrewid: MyString
+  dorm: MyString
+  room: MyString
+  cell_number: MyString
+  partner_id: 
+  title: MyString
+  admin: false

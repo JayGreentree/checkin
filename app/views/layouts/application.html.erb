@@ -42,11 +42,30 @@
 
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            
+            <% if authenticated? %>
+                <ul class="nav navbar-nav">
+                    <li><%= link_to "Events", "#" %></li>
+                    <li><%= link_to "Counselors", "#" %></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><%= link_to "Log Out", logout_url %></li>
+                </ul>
+            <% else %>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><%= link_to "Log In", login_url %></li>
+                </ul>
+            <% end %>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
-
+    
+    <% unless flash[:error] == "" || flash[:error].nil? %>
+        <div class="container alerts">
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert"><%= flash[:error] %></div>
+            </div>
+        </div>
+    <% end %>
 
     <%= yield %>
 
