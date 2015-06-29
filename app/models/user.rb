@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+  has_many :checkin_session_owners, dependent: :destroy
+  has_many :checkin_sessions, through: :checkin_session_owners
+  has_many :checkins, class_name: "CheckinUser", dependent: :destroy
+
+  scope :counselors, -> { where("title like ?", "%Counselor%") }
+  scope :staff, -> { where("title like ? or title like ?", "%Counselor%", "%Director%") }
   belongs_to :partner, :class_name => "User"
 
   def ldap_reference

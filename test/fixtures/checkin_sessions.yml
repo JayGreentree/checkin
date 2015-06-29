@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  key: MyString
+  label: MyString
+  checkin_session_type_id: 
+  check_in_by: 2015-06-29 10:46:12
+
+two:
+  key: MyString
+  label: MyString
+  checkin_session_type_id: 
+  check_in_by: 2015-06-29 10:46:12
