@@ -2,7 +2,7 @@ class CheckinUser < ActiveRecord::Base
   belongs_to :user
   belongs_to :checkin_session
 
-  attr_accessor :user_search
+  attr_accessor :user_search, :checkin_status
 
   validates_presence_of :user, message: "could not be found"
   validates_presence_of :checkin_session, message: "could not be found"

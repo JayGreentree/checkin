@@ -1,35 +1,41 @@
 <div id="rapid-checkin-form" class="well well-lg">
     <%= form_for(:rapid_checkin, { url: rapid_checkin_path,
-                                  html: { method: "post", class: "text-center" }
-                                 } ) do |f| %>
-        <%= f.hidden_field :checkin_session_id, value: params[:id] %>
-        <div class="form-group">
-            <%= f.label(:user_search, "Checkin User:", class: "sr-only") %>
-            <div class="<%= input_group_classes(rapid_checkin) %>">
-                <%= f.text_field( :user_search, 
-                                 { placeholder: "Card Swipe or Andrew ID", 
-                                   class: "form-control", 
-                                   autofocus: true, 
-                                   "aria-describedby" => "checkin-user-error-status"
-                                  } ) %>
-                <div class="form-feedback-container">
-                    <% if rapid_checkin.errors.any? %>
-                        <span class="glyphicon glyphicon-remove form-control-feedback"
-                              aria-hidden="true"></span>
-                        <span id="checkin-user-error-status" class="sr-only">(error)</span>
-                    <% end %>
-                </div>
-
-                <span class="input-group-btn">
-                    <%= submit_tag("Checkin!", class: "btn btn-default") %>
+                                   html: { method: "post", class: "text-center" }
+                                  } ) do |f| %>
+    <%= f.hidden_field :checkin_session_id, value: params[:id] %>
+    <div class="form-group">
+        <%= f.label(:user_search, "Checkin User:", class: "sr-only") %>
+        <div class="<%= feedback_classes( checkin: rapid_checkin, context: "input_group") %>">
+            <%= f.text_field( :user_search, 
+                             { placeholder: "Card Swipe or Andrew ID", 
+                               class: "form-control", 
+                               autofocus: true, 
+                               "aria-describedby" => "checkin-user-error-status"
+                              } ) %>
+            <div class="form-feedback-container">
+                <span class="<%= feedback_classes( checkin: rapid_checkin,
+                                                  context: "glyphicon") %>"
+                      aria-hidden="true"></span>
+                
+                <span id="checkin-user-error-status" class="sr-only">
+                    (<%= rapid_checkin.checkin_status.to_s %>)
                 </span>
+                
             </div>
-            <% if rapid_checkin.errors.any? %>
-                <p class="bg-danger text-left error-explanation">
-                    <%= rapid_checkin.errors.full_messages.join("; ") %>
-                </p>
-            <% end %>
+            
+            <span class="input-group-btn">
+                <%= submit_tag("Checkin!", class: "btn btn-default") %>
+            </span>
+            
+        </div>
+        
+        <% unless rapid_checkin.checkin_status.nil? %>
+            <p class="<%= feedback_classes( checkin: rapid_checkin, context: "result_explanation" ) %>">
+                <%= flash[:rapid_checkin] %>
+            </p>
+        <% end %>
+        
 
-        </div><!-- /.form-group -->
+    </div><!-- /.form-group -->
     <% end %>
 </div>

@@ -1,3 +1,3 @@
 $ ->
-  $("#rapid-checkin-form .error-explanation")
+  $("#rapid-checkin-form .result-explanation")
     .slideDown "slow"
