@@ -1,0 +1,20 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center" style="margin-bottom: 0;">
+                <%= @checkin.checkin_session.checkin_session_type.label %> Checkin
+            </h1>
+            <h1 class="text-center" style="margin-top: 0">
+                <small><%= @checkin.checkin_session.label %></small>
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <%= render partial: "checkin_users/rapid_checkin", object: @checkin %>
+        </div>
+    </div>
+    
+</div>

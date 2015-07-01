@@ -2,8 +2,21 @@
 <div class="jumbotron">
     <div class="container">
         <h1>Hello, <%= current_user.given_name %>!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+
+        <% unless @upcoming_checkins.nil? %>
+            <% n = @upcoming_checkins.first %>
+            <p>
+                Looks like your next checkin is the <%= n.label %> <%= n.checkin_session_type.label %> checkin.
+            </p>
+            <p>
+                Students must check in by <strong><%= n.check_in_by.to_s(:time) %></strong> or
+                they are considered late.
+            </p>
+            <p>
+                <%= link_to( raw("Go to #{n.checkin_session_type.label} Checkin &raquo;" ),
+                            checkin_users_url(n), class: "btn btn-primary btn-lg", role: "button" ) %>
+            </p>
+        <% end %>
     </div>
 </div>
 
@@ -11,21 +24,21 @@
 <div class="container">
     <!-- Example row of columns -->
     <div class="row">
-        <div class="col-md-4">
-            <h2>Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Heading</h2>
-            <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Heading</h2>
-            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-        </div>
+        <%= render( partial: "counselor_floor",
+                   locals: {
+                            checkin: @upcoming_checkins.
+                            find_by( checkin_session_type:
+                                    CheckinSessionType.find_by_key('floor'))
+                            } ) %>
+
+        <%= render( partial: "counselor_event",
+                   locals: {
+                            checkin: @upcoming_checkins.
+                            find_by( checkin_session_type:
+                                    CheckinSessionType.find_by_key('event'))
+                            } ) %>
+
+        <%= render( partial: "counselor_new_event" ) %>
     </div>
 </div>
 

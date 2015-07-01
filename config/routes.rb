@@ -5,6 +5,18 @@ Rails.application.routes.draw do
   get 'login',  to: 'sessions#create'
   get 'logout', to: 'sessions#destroy', via: [:get, :delete]
 
+  resources :checkin_sessions, as: "checkins", path: "checkins" do
+    member do
+      # post must come before get to prevent Invalid route name,
+      #   already in use: 'rapid_checkin'
+      post "rapid_checkin", as: "rapid", to: "checkin_users#checkin",
+           path: "rapid-fire"
+      get "rapid" => "checkin_users#index", path: "rapid-fire"
+    end
+
+    resources :checkin_users, as: "users", path: "user-checkins"
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

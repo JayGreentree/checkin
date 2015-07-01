@@ -44,7 +44,8 @@
         <div id="navbar" class="navbar-collapse collapse">
             <% if authenticated? %>
                 <ul class="nav navbar-nav">
-                    <li><%= link_to "Events", "#" %></li>
+                    <li><%= link_to "Sessions", checkins_url %></li>
+                    <li><%= link_to "Students", "#" %></li>
                     <li><%= link_to "Counselors", "#" %></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

@@ -3,9 +3,34 @@ class User < ActiveRecord::Base
   has_many :checkin_sessions, through: :checkin_session_owners
   has_many :checkins, class_name: "CheckinUser", dependent: :destroy
 
-  scope :counselors, -> { where("title like ?", "%Counselor%") }
-  scope :staff, -> { where("title like ? or title like ?", "%Counselor%", "%Director%") }
   belongs_to :partner, :class_name => "User"
+
+  validates_presence_of :andrewid, message: "required"
+  validates_uniqueness_of :andrewid, message: "already exists"
+
+  scope :counselors, -> { where("title like ?","%Counselor%") }
+  scope :admins, -> { where(admin: true) }
+  scope :staff, -> { where("title like ? or title like ?","%Counselor%", "%Director%") }
+
+  def staff?
+    User.staff.include? self
+  end
+
+  def counselor?
+    User.counselors.include? self
+  end
+
+  def self.find_andrew_user search_string
+    u = self.find_by_andrewid search_string
+    u ||= self.find_or_create_by( andrewid: CarnegieMellonIDCard.search( search_string ) )
+    unless u.validate(:andrewid)
+      u = self.find_or_create_by( andrewid: CarnegieMellonPerson.
+                       find_by_andrewid( search_string )[:cmuandrewid] )
+    end
+    u
+  rescue ActiveLdap::EntryNotFound
+  end
+
 
   def ldap_reference
     @ldap_reference ||= CarnegieMellonPerson.find_by_andrewid( self.andrewid )

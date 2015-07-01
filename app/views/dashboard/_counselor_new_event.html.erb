@@ -1,0 +1,13 @@
+<div class="col-md-4">
+    <h2>Create Event</h2>
+    <p>
+        Need to keep track of people?
+        An event will let you know who went and who came
+        back.
+    </p>
+    <p>
+        <%= link_to( raw("Add an Event Checkin &raquo;"),
+                    new_checkin_url(type: "event"),
+                    class: "btn btn-default", role: "button" ) %>
+    </p>
+</div>
