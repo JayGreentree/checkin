@@ -12,6 +12,8 @@
             Students must check in by <strong><%= checkin.check_in_by.to_s(:time) %></strong> or
             they are considered late.
         </p>
-        <p><%= link_to raw("Go to Floor Checkin &raquo;"), checkin_users_url(checkin), class: "btn btn-primary", role: "button" %></p>
+        <p>
+            <%= link_to( raw("Go to Floor Checkin &raquo;"),
+                         rapid_checkin_url(checkin), class: "btn btn-primary", role: "button" ) %></p>
     <% end %>
 </div>
