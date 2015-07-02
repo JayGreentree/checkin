@@ -5,6 +5,7 @@
 
         <% unless @upcoming_checkins.nil? %>
             <% n = @upcoming_checkins.first %>
+            <% p = @past_checkins.first unless @past_checkins.nil? %>
             <p>
                 Looks like your next checkin is the <%= n.label %> <%= n.checkin_session_type.label %> checkin.
             </p>
@@ -14,7 +15,13 @@
             </p>
             <p>
                 <%= link_to( raw("Go to #{n.checkin_session_type.label} Checkin &raquo;" ),
-                             rapid_checkin_url(n), class: "btn btn-primary btn-lg", role: "button" ) %>
+                            rapid_checkin_url(n), class: "btn btn-primary btn-lg", role: "button" ) %>
+            </p>
+            <p>
+                <% unless p.nil? %>
+                    <%= link_to( raw("&laquo; go to last checkin" ),
+                                rapid_checkin_url(p), class: "", role: "button" ) %>
+                <% end %>
             </p>
         <% end %>
     </div>

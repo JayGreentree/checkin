@@ -5,6 +5,7 @@ class DashboardController < ApplicationController
 
     if current_user && current_user.staff?
       @upcoming_checkins = current_user.checkin_sessions.current
+      @past_checkins = current_user.checkin_sessions.past
     end
   end
 end
