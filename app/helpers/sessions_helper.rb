@@ -18,7 +18,6 @@ module SessionsHelper
     self.current_user = User.find_by_andrewid( username )
     if current_user.nil? || current_user.title.nil?
       flash[:error] = "Party Fowl: Not authorized."
-      redirect_to root_url
     else
       session[:remember_token] = current_user.id
     end
