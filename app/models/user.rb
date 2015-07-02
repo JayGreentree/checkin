@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   has_many :checkin_session_owners, dependent: :destroy
   has_many :checkin_sessions, through: :checkin_session_owners
   has_many :checkins, class_name: "CheckinUser", dependent: :destroy
-
+  
   belongs_to :partner, :class_name => "User"
 
   validates_presence_of :andrewid, message: "required"
@@ -16,10 +16,6 @@ class User < ActiveRecord::Base
     User.staff.include? self
   end
 
-  def counselor?
-    User.counselors.include? self
-  end
-
   def self.find_andrew_user search_string
     u = self.find_by_andrewid search_string
     u ||= self.find_or_create_by( andrewid: CarnegieMellonIDCard.search( search_string ) )
@@ -31,6 +27,12 @@ class User < ActiveRecord::Base
   rescue ActiveLdap::EntryNotFound
   end
 
+
+  def counselors
+    # TODO
+    User.counselors.first(2)
+  end
+  
 
   def ldap_reference
     @ldap_reference ||= CarnegieMellonPerson.find_by_andrewid( self.andrewid )

@@ -17,4 +17,16 @@
     }
 
     .form-feedback-container { position: relative; }
+
+    .progress {
+        -webkit-border-top-right-radius: 0;
+        -webkit-border-top-left-radius: 0;
+        -moz-border-radius-topright: 0;
+        -moz-border-radius-topleft: 0;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        height: 4px;
+        margin: 0 -25px -24px -25px;
+        
+    }
 }

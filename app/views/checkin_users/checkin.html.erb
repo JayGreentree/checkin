@@ -12,10 +12,15 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
-            <%= render( partial: "checkin_users/rapid_checkin",
+        <div id="rapid-checkin-wrapper" class="col-md-12">
+            <%= render( partial: "rapid_checkin",
                         object: @checkin, locals: { status: @status } ) %>
         </div>
     </div>
-    
+
+    <div id="checkin-session-wrapper">
+        <%= render( partial: "checkin_session",
+                    object: @checkin.checkin_session ) %>
+    </div>
+
 </div>

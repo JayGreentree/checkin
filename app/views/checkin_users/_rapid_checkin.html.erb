@@ -38,4 +38,19 @@
 
     </div><!-- /.form-group -->
     <% end %>
+
+    <div class="progress">
+        <div class="progress-bar progress-bar-success"
+             style="width: <%= on_time_percent( rapid_checkin.checkin_session ) %>%">
+            <span class="sr-only"><%= on_time_percent( rapid_checkin.checkin_session ) %>% Signed In</span>
+        </div>
+        <div class="progress-bar progress-bar-warning"
+             style="width: <%= late_percent( rapid_checkin.checkin_session ) %>%">
+            <span class="sr-only"><%= late_percent( rapid_checkin.checkin_session ) %>% Late</span>
+        </div>
+        <div class="progress-bar progress-bar-danger"
+             style="width: <%= missing_percent( rapid_checkin.checkin_session ) %>%">
+            <span class="sr-only"><%= late_percent( rapid_checkin.checkin_session ) %>% Missing</span>
+        </div>
+    </div>
 </div>

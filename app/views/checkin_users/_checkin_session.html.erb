@@ -1,0 +1,16 @@
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a href="#">Missing <span class="badge"><%= checkin_session.missing_checkins.size %></span></a></li>
+    <li role="presentation">
+        <a href="#">Signed In <span class="badge"><%= checkin_session.completed_checkins.size %></span></a>
+    </li>
+    <li role="presentation">
+        <a href="#">Everyone <span class="badge"><%= checkin_session.checkins.size %></span></a>
+    </li>
+</ul>
+
+<div class="row">
+    <div id="checkin-users-wrapper" class="col-md-12">
+        <%= render( partial: "checkin_list", object: checkin_session ) %>
+    </div>
+</div>

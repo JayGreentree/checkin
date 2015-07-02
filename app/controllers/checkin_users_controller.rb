@@ -10,7 +10,9 @@ class CheckinUsersController < ApplicationController
   def checkin
     @checkin = CheckinUser.
                find_or_initialize_by( rapid_checkin_params )
-    if @checkin.new_record? && @checkin.valid?
+    if @checkin.invalid?
+      @checkin.checkin_status = :error
+    elsif @checkin.new_record? && @checkin.valid?
       @checkin.checkin_status = :error
       @checkin.errors.add(:base, "#{@checkin.user.name} is not on this checkin list")
     else

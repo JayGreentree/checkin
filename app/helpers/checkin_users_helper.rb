@@ -21,4 +21,34 @@ module CheckinUsersHelper
 
     classes[options[:context]].join(" ")
   end
+
+  
+  
+  def checkin_percent( options = {} )
+    ((options[:session].send(options[:scope]).size /
+      options[:session].checkins.size ) *100).to_s
+  rescue NoMethodError
+    "0"
+  end
+
+  def missing_percent session
+    checkin_percent( session: session,
+                     scope: :missing_checkins )
+  end
+
+  def on_time_percent session
+    checkin_percent( session: session,
+                     scope: :on_time_checkins )
+  end
+
+  def late_percent session
+    checkin_percent( session: session,
+                     scope: :late_checkins )
+  end
+
+
+  def checkin_table_row_classes( checkin )
+    checkin.late? ? "danger" : ""
+  end
+
 end
