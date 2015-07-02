@@ -1,5 +1,6 @@
 class CheckinSessionsController < ApplicationController
   def index
+    redirect_to root_url
   end
 
   def show
@@ -10,6 +11,7 @@ class CheckinSessionsController < ApplicationController
   end
 
   def new
+    redirect_to root_url
   end
   
   def create
