@@ -26,14 +26,14 @@
     <div class="row">
         <%= render( partial: "counselor_floor",
                    locals: {
-                            checkin: @upcoming_checkins.
+                            checkin: @upcoming_checkins.nil? ? nil : @upcoming_checkins.
                             find_by( checkin_session_type:
                                     CheckinSessionType.find_by_key('floor'))
                             } ) %>
 
         <%= render( partial: "counselor_event",
                    locals: {
-                            checkin: @upcoming_checkins.
+                            checkin: @upcoming_checkins.nil? ? nil : @upcoming_checkins.
                             find_by( checkin_session_type:
                                     CheckinSessionType.find_by_key('event'))
                             } ) %>
