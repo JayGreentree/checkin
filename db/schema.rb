@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150629145041) do
+ActiveRecord::Schema.define(version: 20150702141040) do
 
   create_table "checkin_session_owners", force: :cascade do |t|
     t.integer  "user_id",            limit: 4
@@ -52,6 +52,13 @@ ActiveRecord::Schema.define(version: 20150629145041) do
   add_index "checkin_users", ["checkin_session_id"], name: "index_checkin_users_on_checkin_session_id", using: :btree
   add_index "checkin_users", ["user_id"], name: "index_checkin_users_on_user_id", using: :btree
 
+  create_table "programs", force: :cascade do |t|
+    t.string   "key",        limit: 255
+    t.string   "label",      limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "andrewid",    limit: 255
     t.string   "dorm",        limit: 255
@@ -62,13 +69,16 @@ ActiveRecord::Schema.define(version: 20150629145041) do
     t.boolean  "admin",       limit: 1
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.integer  "program_id",  limit: 4
   end
 
   add_index "users", ["partner_id"], name: "index_users_on_partner_id", using: :btree
+  add_index "users", ["program_id"], name: "index_users_on_program_id", using: :btree
 
   add_foreign_key "checkin_session_owners", "checkin_sessions"
   add_foreign_key "checkin_session_owners", "users"
   add_foreign_key "checkin_sessions", "checkin_session_types"
   add_foreign_key "checkin_users", "checkin_sessions"
   add_foreign_key "checkin_users", "users"
+  add_foreign_key "users", "programs"
 end

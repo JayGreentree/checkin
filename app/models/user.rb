@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :checkins, class_name: "CheckinUser", dependent: :destroy
   
   belongs_to :partner, :class_name => "User"
+  belongs_to :program
 
   validates_presence_of :andrewid, message: "required"
   validates_uniqueness_of :andrewid, message: "already exists"

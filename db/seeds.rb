@@ -94,3 +94,19 @@ t.checkin_sessions.find_each do |s|
 end
 puts ""
 
+# Add Programs
+puts "Adding programs"
+puts "==============="
+[
+  ["APEA","APEA"],
+  ["ARC","Architecture"],
+  ["ART","Art"],
+  ["DRA","Drama"],
+  ["ETC","ETC"],
+  ["MUS","Music"]
+].each do |p|
+  puts " * #{p[0]} - #{p[1]}"
+  u = Program.find_or_create_by key: p[0]
+  u.update_attributes( label: p[1] )
+end
+puts ""
