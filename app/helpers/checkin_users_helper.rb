@@ -49,7 +49,7 @@ module CheckinUsersHelper
 
 
   def checkin_table_row_classes( checkin )
-    checkin.late? ? "danger" : ""
+    checkin.late? ? "warning" : ""
   end
 
 end
