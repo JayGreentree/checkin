@@ -1,10 +1,9 @@
 <tr class="<%= checkin_table_row_classes checkin %>">
     <td><%= checkin.checked_in_at.nil? ? raw("&mdash;") : checkin.checked_in_at.strftime("%H:%M") %></td>
     <td><%= checkin.user.name %></td>
-    <td>(<%= checkin.user.andrewid %>)</td>
+    <td><%= checkin.user.andrewid %></td>
     <td><%= checkin.user.dorm %></td>
     <td><%= checkin.user.room %></td>
     <td><%= checkin.user.cell_number %></td>
-    <td>Roommate</td>
-    <td>Program</td>
+    <td><%= checkin.user.program.label unless checkin.user.program.nil? %></td>
 </tr>
