@@ -10,4 +10,4 @@ Rails.application.config.assets.paths << Rails.root.join('vendor', 'assets', 'fo
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
-Rails.application.config.assets.precompile += %w( .svg .eot .woff .ttf)
+Rails.application.config.assets.precompile += %w( glyphicons-halflings-regular.eot glyphicons-halflings-regular.svg glyphicons-halflings-regular.woff glyphicons-halflings-regular.ttf )
