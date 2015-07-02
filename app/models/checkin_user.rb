@@ -6,6 +6,7 @@ class CheckinUser < ActiveRecord::Base
 
   validates_presence_of :user, message: "could not be found"
   validates_presence_of :checkin_session, message: "could not be found"
+  validates :user, uniqueness: { scope: :checkin_session }
 
   scope :missing, -> { where( checked_in_at: nil ) }
   scope :signed_in, -> { where.not( checked_in_at: nil ) }
