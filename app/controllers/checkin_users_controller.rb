@@ -19,6 +19,8 @@ class CheckinUsersController < ApplicationController
       # TODO: Warn about an already checked-in user & prompt to re-checkin
       #if @checkin.checked_in_at.nil?
         @checkin.checked_in_at = Time.now
+        @checkin.attendant = current_user
+        
         if @checkin.save
           @checkin.checkin_status = :success
         else

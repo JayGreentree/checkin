@@ -1,6 +1,7 @@
 class CheckinUser < ActiveRecord::Base
   belongs_to :user
   belongs_to :checkin_session
+  belongs_to :attendant, class_name: "User"
 
   attr_accessor :user_search, :checkin_status
 

@@ -6,4 +6,5 @@
     <td><%= checkin.user.room %></td>
     <td><%= checkin.user.cell_number %></td>
     <td><%= checkin.user.program.label unless checkin.user.program.nil? %></td>
+    <td><%= checkin.attendant.nil? ? raw("&mdash;") : checkin.attendant.name %></td>
 </tr>
