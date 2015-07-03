@@ -25,8 +25,8 @@ module CheckinUsersHelper
   
   
   def checkin_percent( options = {} )
-    ((options[:session].send(options[:scope]).size /
-      options[:session].checkins.size ) *100).to_s
+    ((options[:session].send(options[:scope]).size*100 /
+      options[:session].checkins.size.to_f )).to_s
   rescue NoMethodError,
          ZeroDivisionError
     "0"
