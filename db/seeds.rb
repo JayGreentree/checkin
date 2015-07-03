@@ -165,12 +165,16 @@ csv.each do |row|
                        program: p,
                        staff: false,
                        admin: false )
+  u.counselors.destroy_all
+  UserCounselor.create( user: u, counselor: User.find_by( andrewid: row[2] ) )
+  UserCounselor.create( user: u, counselor: User.find_by( andrewid: row[3] ) )
+
   # Add Prekies to Checkins
   building_checkin.checkin_sessions.each do |t|
-    CheckinUser.find_or_create_by( checkin_session: t, user: u )
+    CheckinUser.create( checkin_session: t, user: u )
   end
   floor_checkin.checkin_sessions.where(key: floor_key).each do |t|
-    CheckinUser.find_or_create_by( checkin_session: t, user: u )
+    CheckinUser.create( checkin_session: t, user: u )
   end
   puts " * #{u.andrewid}"
 end

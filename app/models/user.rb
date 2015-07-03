@@ -2,6 +2,12 @@ class User < ActiveRecord::Base
   has_many :checkin_session_owners, dependent: :destroy
   has_many :checkin_sessions, through: :checkin_session_owners
   has_many :checkins, class_name: "CheckinUser", dependent: :destroy
+
+  has_many :user_counselors, dependent: :destroy
+  has_many :counselors, through: :user_counselors
+
+  has_many :user_residents, dependent: :destroy, class_name: "UserCounselor", foreign_key: "counselor_id"
+  has_many :residents, through: :user_residents, source: :user
   
   belongs_to :partner, :class_name => "User"
   belongs_to :program
@@ -28,12 +34,6 @@ class User < ActiveRecord::Base
   rescue ActiveLdap::EntryNotFound
   end
 
-
-  def counselors
-    # TODO
-    User.counselors.first(2)
-  end
-  
 
   def ldap_reference
     @ldap_reference ||= CarnegieMellonPerson.find_by_andrewid( self.andrewid )
