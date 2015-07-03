@@ -1,6 +1,6 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-
+require 'csv'
 
 # Checkin Session Types
 puts "Creating checkin session types"
@@ -108,5 +108,38 @@ puts "==============="
   puts " * #{p[0]} - #{p[1]}"
   u = Program.find_or_create_by key: p[0]
   u.update_attributes( label: p[1] )
+end
+puts ""
+
+# Add Prekies
+# 201,jcjosey,MG2CD,DRA
+puts "Adding prekies & default checkins"
+puts "================================="
+csv_text = File.read("#{Rails.root}/db/#{Rails.env}-prekies.csv")
+csv = CSV.parse(csv_text, :headers => true)
+building_checkin = CheckinSessionType.find_by_key 'building'
+floor_checkin = CheckinSessionType.find_by_key 'floor'
+csv.each do |row|
+  p = Program.find_by_key row[3]
+  u = User.find_or_create_by andrewid: row[1]
+  room = row[0]
+  dorm = "Morewood Gardens"
+  floor_key = room[0]
+  if room[0] == "E"
+    room = room.split('E')[1]
+    dorm = "E-Tower"
+    floor_key = "E#{room[0]}"
+  end
+  u.update_attributes( room: room,
+                       dorm: dorm,
+                       program: p)
+  # Add Prekies to Checkins
+  building_checkin.checkin_sessions.each do |t|
+    CheckinUser.find_or_create_by( checkin_session: t, user: u )
+  end
+  floor_checkin.checkin_sessions.where(key: floor_key).each do |t|
+    CheckinUser.find_or_create_by( checkin_session: t, user: u )
+  end
+  puts " * #{u.andrewid}"
 end
 puts ""
