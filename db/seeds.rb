@@ -45,29 +45,43 @@ end
 puts ""
 
 
-# Exec
-puts "Creating exec"
-puts "============="
-[
-  ["Andrew Carnegie","(412) 268-1000","andrew","Program Director","","","","","","",""]
-].each do |c|
-  puts " * #{c[0]} - #{c[4]}"
-  u = User.find_or_create_by andrewid: c[2]
-  u.update_attributes( cell_number: c[1], dorm: c[6], room: c[8], title: c[4], admin: true )
+# Add Exec
+# "Name","Phone","Andrew ID","Email","Position","Building","Room #"
+# "Susie Rush","(000) 000-0000","ssheldon","test@precollege.andrew.cmu.edu","Program Director","",""
+puts "Adding exec"
+puts "==========="
+csv_text = File.read("#{Rails.root}/db/seeds/#{Rails.env}/exec.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |row|
+  puts " * #{row[0]} - #{row[4]}"
+  u = User.find_or_create_by andrewid: row[2]
+  u.update_attributes( cell_number: row[1],
+                       dorm: row[5],
+                       room: row[6],
+                       title: row[4],
+                       admin: true,
+                       staff: true )
 end
 puts ""
 
-# Counselors
-# cat /tmp/c.csv | sed 's/^/["/;s/,/","/g;s/$/"],/'
-puts "Creating counselors"
-puts "==================="
-[
-  ["Andrew Mellon","","amellon","","Counselor","Morewood Garden","Morewood Gardens - A Tower","1","123","A","Henry Clay Frick"],
-  ["Henry Clay Frick","","hcfrick","","Counselor","Morewood Garden","Morewood Gardens - A Tower","1","124","A","Andrew Mellon"]
-].each do |c|
-  puts " * #{c[0]} - #{c[4]}"
-  u = User.find_or_create_by andrewid: c[2]
-  u.update_attributes( cell_number: c[1], dorm: c[6], room: c[8], title: c[4], partner: u )
+# Add Counselors
+#  "Name","Phone","Andrew ID","Email","Position","Building","Room #","Partner"
+#  "Peter Friedman","(000) 000-0000","pfriedma","test@precollege.andrew.cmu.edu","Counselor","E-Tower","E100","adrake"
+puts "Adding counselors"
+puts "================="
+csv_text = File.read("#{Rails.root}/db/seeds/#{Rails.env}/counselors.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |row|
+  puts " * #{row[0]} - #{row[4]}"
+  u = User.find_or_create_by andrewid: row[2]
+  p = User.find_or_create_by andrewid: row[7] unless row[7].nil?
+  u.update_attributes( cell_number: row[1],
+                       dorm: row[5],
+                       room: row[6],
+                       title: row[4],
+                       partner: p,
+                       staff: true,
+                       admin: false )
 end
 puts ""
 
@@ -87,8 +101,8 @@ puts "==================================="
 t = CheckinSessionType.find_by_key 'floor'
 t.checkin_sessions.find_each do |s|
   owners = User.counselors.where("room like ?", "#{s.key[-1]}%")
-  owners = s.key[0] == "E" ? owners.where("dorm like ?", "%E Tower") :
-             owners.where.not("dorm like ?", "%E Tower")
+  owners = s.key[0] == "E" ? owners.where(dorm: "E-Tower") :
+             owners.where.not(dorm: "E-Tower")
   puts " * #{s.label}: #{owners.pluck(:andrewid).join(', ')}"
   owners.map{ |o| CheckinSessionOwner.find_or_create_by( checkin_session: s, user: o ) }
 end
@@ -111,28 +125,46 @@ puts "==============="
 end
 puts ""
 
-# Add Prekies
-# 201,jcjosey,MG2CD,DRA
-puts "Adding prekies & default checkins"
-puts "================================="
-csv_text = File.read("#{Rails.root}/db/#{Rails.env}-prekies.csv")
+# Add Commuters
+# "Andrew","Program"
+# "azl","APEA"
+puts "Adding commuters"
+puts "================"
+csv_text = File.read("#{Rails.root}/db/seeds/#{Rails.env}/commuters.csv")
+csv = CSV.parse(csv_text, :headers => true)
+csv.each do |row|
+  p = Program.find_by_key row[1]
+  u = User.find_or_create_by andrewid: row[0]
+  u.update_attributes( program: p, staff: false, admin: false )
+  puts " * #{u.andrewid}"
+end
+puts ""
+
+# Add Residents
+# "Room","Andrew ID","Counselor1","Counselor2","Program"
+# "201","meribyte","mmackie","pfriedma","DRA"
+puts "Adding residents & default checkins"
+puts "==================================="
+csv_text = File.read("#{Rails.root}/db/seeds/#{Rails.env}/residents.csv")
 csv = CSV.parse(csv_text, :headers => true)
 building_checkin = CheckinSessionType.find_by_key 'building'
 floor_checkin = CheckinSessionType.find_by_key 'floor'
 csv.each do |row|
-  p = Program.find_by_key row[3]
+  p = Program.find_by_key row[4]
   u = User.find_or_create_by andrewid: row[1]
   room = row[0]
   dorm = "Morewood Gardens"
-  floor_key = room[0]
-  if room[0] == "E"
+  floor_key = room[0] # First number in room
+  if floor_key == "E" # E-Tower
     room = room.split('E')[1]
     dorm = "E-Tower"
     floor_key = "E#{room[0]}"
   end
   u.update_attributes( room: room,
                        dorm: dorm,
-                       program: p)
+                       program: p,
+                       staff: false,
+                       admin: false )
   # Add Prekies to Checkins
   building_checkin.checkin_sessions.each do |t|
     CheckinUser.find_or_create_by( checkin_session: t, user: u )

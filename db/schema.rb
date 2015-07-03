@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150702214145) do
+ActiveRecord::Schema.define(version: 20150703154451) do
 
   create_table "checkin_session_owners", force: :cascade do |t|
     t.integer  "user_id",            limit: 4
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20150702214145) do
     t.integer  "partner_id",  limit: 4
     t.string   "title",       limit: 255
     t.boolean  "admin",       limit: 1
+    t.boolean  "staff",       limit: 1
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "program_id",  limit: 4

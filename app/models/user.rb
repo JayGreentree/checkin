@@ -9,12 +9,12 @@ class User < ActiveRecord::Base
   validates_presence_of :andrewid, message: "required"
   validates_uniqueness_of :andrewid, message: "already exists"
 
-  scope :counselors, -> { where("title like ?","%Counselor%") }
-  scope :admins, -> { where(admin: true) }
-  scope :staff, -> { where("title like ? or title like ?","%Counselor%", "%Director%") }
+  scope :counselors, -> { where( "staff = ? and admin = ?", true, false ) }
+  scope :admins, -> { where( admin: true ) }
+  scope :staff, -> { where( staff: true ) }
 
   def staff?
-    User.staff.include? self
+    self.staff
   end
 
   def self.find_andrew_user search_string
