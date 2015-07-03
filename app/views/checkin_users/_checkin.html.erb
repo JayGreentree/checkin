@@ -1,4 +1,9 @@
-<tr class="<%= checkin_table_row_classes checkin %>">
+<tr class="<%= checkin_table_row_classes( checkin ) %>">
+    <td>
+        <% if checkin.late? %>
+            <span class="label label-warning">Late</span>
+        <% end %>
+    </td>
     <td><%= checkin.checked_in_at.nil? ? raw("&mdash;") : checkin.checked_in_at.strftime("%H:%M") %></td>
     <td><%= checkin.user.name %></td>
     <td><%= checkin.user.andrewid %></td>

@@ -26,4 +26,7 @@ class CheckinUser < ActiveRecord::Base
     self.checked_in_at.nil? ? false : self.checked_in_at > self.checkin_session.check_in_by
   end
 
+  def missing_after_curfew?
+    self.checked_in_at.nil? and Time.now > self.checkin_session.check_in_by
+  end
 end

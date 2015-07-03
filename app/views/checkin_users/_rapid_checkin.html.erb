@@ -2,6 +2,7 @@
     <%= form_for(:rapid_checkin, { url: rapid_checkin_path,
                                    html: { method: "post", class: "text-center" }
                                   } ) do |f| %>
+    <%= hidden_field_tag :filter, params[:filter] %>
     <%= f.hidden_field :checkin_session_id, value: params[:id] %>
     <div class="form-group">
         <%= f.label(:user_search, "Checkin User:", class: "sr-only") %>

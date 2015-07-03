@@ -49,7 +49,17 @@ module CheckinUsersHelper
 
 
   def checkin_table_row_classes( checkin )
-    checkin.late? ? "warning" : ""
+    if checkin.missing_after_curfew?
+      "danger"
+    end
+
   end
 
+  def filter_checkins( session, scope )
+    if ["missing_checkins","completed_checkins","checkins"].include? scope
+      session.send(scope)
+    else
+      session.checkins
+    end
+  end
 end

@@ -1,11 +1,24 @@
-<ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active">
-        <a href="#">Missing <span class="badge"><%= checkin_session.missing_checkins.size %></span></a></li>
-    <li role="presentation">
-        <a href="#">Signed In <span class="badge"><%= checkin_session.completed_checkins.size %></span></a>
+<ul id="checkin-users-nav" class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="<%= "active" if
+                                   params[:filter] == 'checkins' ||
+                                   params[:filter].nil? %>">
+        <%= link_to( raw( "Everyone <span class=\"badge\">" +
+                          "#{checkin_session.checkins.size}</span>" ),
+                     rapid_checkin_path(filter: "checkins") ) %>
     </li>
-    <li role="presentation">
-        <a href="#">Everyone <span class="badge"><%= checkin_session.checkins.size %></span></a>
+
+    <li role="presentation" class="<%= "active" if
+                                   params[:filter] == 'missing_checkins' %>">
+        <%= link_to( raw( "Missing <span class=\"badge\">" +
+                          "#{checkin_session.missing_checkins.size}</span>" ),
+                     rapid_checkin_path(filter: "missing_checkins") ) %>
+    </li>
+
+    <li role="presentation" class="<%= "active" if
+                                   params[:filter] == 'completed_checkins' %>">
+        <%= link_to( raw( "Signed In <span class=\"badge\">" +
+                          "#{checkin_session.completed_checkins.size}</span>" ),
+                     rapid_checkin_path(filter: "completed_checkins") ) %>
     </li>
 </ul>
 
