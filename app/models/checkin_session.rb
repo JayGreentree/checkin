@@ -13,6 +13,6 @@ class CheckinSession < ActiveRecord::Base
   has_many :users, through: :checkins
 
   scope :today, -> { where(check_in_by: (Time.now.midnight - 1.day)..Time.now) }
-  scope :current, -> { where("check_in_by >= ?", Time.now.yesterday.end_of_day).order( check_in_by: :asc) }
-  scope :past, -> { where("check_in_by <= ?", Time.now.yesterday.end_of_day).order( check_in_by: :desc) }
+  scope :current, -> { where("check_in_by >= ?", Time.now).order( check_in_by: :asc) }
+  scope :past, -> { where("check_in_by < ?", Time.now).order( check_in_by: :desc) }
 end
