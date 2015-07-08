@@ -3,7 +3,7 @@ class Date
     t = self.to_time(:local)
     
     if type == :building
-      t += 22.5.hours
+      t += 22.hours
     elsif type == :floor
       t += 23.hours
     else
