@@ -11,6 +11,7 @@ class Date
     end
 
     t += 1.hour if t.friday? || t.saturday?
+    t -= 1.minute # Lateness starts one minute before
     t = (t - 1.day).end_of_day if t == t.at_midnight
     t
   end
