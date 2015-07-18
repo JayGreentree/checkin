@@ -51,7 +51,11 @@
         </div>
         <div class="progress-bar progress-bar-danger"
              style="width: <%= missing_percent( rapid_checkin.checkin_session ) %>%">
-            <span class="sr-only"><%= late_percent( rapid_checkin.checkin_session ) %>% Missing</span>
+            <span class="sr-only"><%= missing_percent( rapid_checkin.checkin_session ) %>% Missing</span>
+        </div>
+        <div class="progress-bar progress-bar-primary"
+             style="width: <%= excused_percent( rapid_checkin.checkin_session ) %>%">
+            <span class="sr-only"><%= excused_percent( rapid_checkin.checkin_session ) %>% Excused</span>
         </div>
     </div>
 </div>

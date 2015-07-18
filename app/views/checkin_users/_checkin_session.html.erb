@@ -20,6 +20,13 @@
                           "#{checkin_session.completed_checkins.size}</span>" ),
                      rapid_checkin_path(filter: "completed_checkins") ) %>
     </li>
+
+    <li role="presentation" class="<%= "active" if
+                                   params[:filter] == 'excused_checkins' %>">
+        <%= link_to( raw( "Excused <span class=\"badge\">" +
+                          "#{checkin_session.excused_checkins.size}</span>" ),
+                     rapid_checkin_path(filter: "excused_checkins") ) %>
+    </li>
 </ul>
 
 <div class="row">

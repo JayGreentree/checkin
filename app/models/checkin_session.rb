@@ -9,6 +9,7 @@ class CheckinSession < ActiveRecord::Base
            class_name: "CheckinUser"
   has_many :missing_checkins, -> { missing }, class_name: "CheckinUser"
   has_many :completed_checkins, -> { signed_in }, class_name: "CheckinUser"
+  has_many :excused_checkins, -> { excused }, class_name: "CheckinUser"
   
   has_many :users, through: :checkins
 

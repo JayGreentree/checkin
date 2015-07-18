@@ -25,8 +25,8 @@ module CheckinUsersHelper
   
   
   def checkin_percent( options = {} )
-    ((options[:session].send(options[:scope]).size*100 /
-      options[:session].checkins.size.to_f )).to_s
+    (options[:session].send(options[:scope]).size*100 /
+      options[:session].checkins.size.to_f).to_s
   rescue NoMethodError,
          ZeroDivisionError
     "0"
@@ -35,6 +35,11 @@ module CheckinUsersHelper
   def missing_percent session
     checkin_percent( session: session,
                      scope: :missing_checkins )
+  end
+
+  def excused_percent session
+    checkin_percent( session: session,
+                     scope: :excused_checkins )
   end
 
   def on_time_percent session
@@ -56,7 +61,7 @@ module CheckinUsersHelper
   end
 
   def filter_checkins( session, scope )
-    if ["missing_checkins","completed_checkins","checkins"].include? scope
+    if ["missing_checkins","completed_checkins","checkins","excused_checkins"].include? scope
       session.send(scope)
     else
       session.checkins

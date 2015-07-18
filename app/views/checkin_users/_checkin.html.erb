@@ -3,8 +3,15 @@
         <% if checkin.late? %>
             <span class="label label-warning">Late</span>
         <% end %>
+
+        <% if checkin.excused? %>
+            <span class="label label-primary">Excused</span>
+        <% end %>
     </td>
-    <td><%= checkin.checked_in_at.nil? ? raw("&mdash;") : checkin.checked_in_at.strftime("%H:%M") %></td>
+    <td><%= checkin.checked_in_at.nil? ?
+        ( checkin.excused? ? "N/A" : raw("&mdash;") ) :
+        checkin.checked_in_at.strftime("%H:%M") %>
+    </td>
     <td><%= checkin.user.name %></td>
     <td><%= checkin.user.andrewid %></td>
     <td><%= checkin.user.dorm %></td>
