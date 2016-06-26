@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150718223159) do
+ActiveRecord::Schema.define(version: 20160626210358) do
 
   create_table "checkin_session_owners", force: :cascade do |t|
     t.integer  "user_id",            limit: 4
@@ -84,6 +84,8 @@ ActiveRecord::Schema.define(version: 20150718223159) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "program_id",  limit: 4
+    t.date     "arrives_on"
+    t.date     "departs_on"
   end
 
   add_index "users", ["partner_id"], name: "index_users_on_partner_id", using: :btree

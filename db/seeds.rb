@@ -17,8 +17,8 @@ end
 puts ""
 
 # Checkin Sessions
-start_date = Date.parse('2015-06-27')
-end_date =   Date.parse('2015-08-09')
+start_date = Date.parse('2016-06-26')
+end_date =   Date.parse('2016-08-06')
 
 puts "Creating building checkin sessions"
 puts "=================================="
@@ -27,6 +27,9 @@ puts "   End: #{end_date.to_s(:checkin_label)}"
 t = CheckinSessionType.find_by_key 'building'
 (start_date..end_date).each do |d|
   e = CheckinSession.find_or_create_by( checkin_session_type: t, check_in_by: d.to_checkin_datetime(:building), key: "morewood" )
+  e.update_attributes( label: e.check_in_by.to_s(:checkin_label) )
+
+  e = CheckinSession.find_or_create_by( checkin_session_type: t, check_in_by: d.to_checkin_datetime(:building), key: "mudge" )
   e.update_attributes( label: e.check_in_by.to_s(:checkin_label) )
 end
 puts ""
@@ -37,7 +40,7 @@ puts " Start: #{start_date.to_s(:checkin_label)}"
 puts "   End: #{end_date.to_s(:checkin_label)}"
 t = CheckinSessionType.find_by_key 'floor'
 (start_date..end_date).each do |d|
-  ["2","3","4","5","6","E3","E4","E5","E6","E7"].each do |f|
+  ["2","3","4","5","6","7","A2","A3","B1","B2","B3","C0","C1","C2","C3"].each do |f|
     e = CheckinSession.find_or_create_by( checkin_session_type: t, check_in_by: d.to_checkin_datetime(:floor), key: "#{f}" )
     e.update_attributes( label: "#{e.check_in_by.to_s(:checkin_label)} - Floor #{f}" )
   end
@@ -100,11 +103,13 @@ puts "Adding floor checkin session owners"
 puts "==================================="
 t = CheckinSessionType.find_by_key 'floor'
 t.checkin_sessions.find_each do |s|
-  owners = User.counselors.where("room like ?", "#{s.key[-1]}%")
-  owners = s.key[0] == "E" ? owners.where(dorm: "E-Tower") :
-             owners.where.not(dorm: "E-Tower")
-  puts " * #{s.label}: #{owners.pluck(:andrewid).join(', ')}"
-  owners.map{ |o| CheckinSessionOwner.find_or_create_by( checkin_session: s, user: o ) }
+#  owners = User.counselors.where("room like ?", "#{s.key[-1]}%")
+#  owners = s.key[0] == "E" ? owners.where(dorm: "E-Tower") :
+#             owners.where.not(dorm: "E-Tower")
+#  puts " * #{s.label}: #{owners.pluck(:andrewid).join(', ')}"
+#  owners.map{ |o| CheckinSessionOwner.find_or_create_by( checkin_session: s, user: o ) }
+   puts " * #{s.label}"
+   User.staff.map{ |o| CheckinSessionOwner.find_or_create_by( checkin_session: s, user: o ) }
 end
 puts ""
 
@@ -142,7 +147,7 @@ puts ""
 
 # Add Residents
 # "Room","Andrew ID","Counselor1","Counselor2","Program"
-# "201","meribyte","mmackie","pfriedma","DRA"
+# "201","meribyte","mmackie","pfriedma","adrake","","DRA","2016-06-25","2016-08-06","Mudge"
 puts "Adding residents & default checkins"
 puts "==================================="
 csv_text = File.read("#{Rails.root}/db/seeds/#{Rails.env}/residents.csv")
@@ -150,27 +155,34 @@ csv = CSV.parse(csv_text, :headers => true)
 building_checkin = CheckinSessionType.find_by_key 'building'
 floor_checkin = CheckinSessionType.find_by_key 'floor'
 csv.each do |row|
-  p = Program.find_by_key row[4]
+  p = Program.find_by_key row[6]
   u = User.find_or_create_by andrewid: row[1]
   room = row[0]
-  dorm = "Morewood Gardens"
+  dorm = row[9]
+  arrives_on = Date.parse(row[7])
+  departs_on = Date.parse(row[8])
+  
   floor_key = room[0] # First number in room
-  if floor_key == "E" # E-Tower
-    room = room.split('E')[1]
-    dorm = "E-Tower"
-    floor_key = "E#{room[0]}"
+  if floor_key == "A" or floor_key == "B" or floor_key == "C" # Mudge Wings
+    floor_key = floor_key + room.split(' ')[1][0]
   end
+  
   u.update_attributes( room: room,
                        dorm: dorm,
                        program: p,
+                       arrives_on: arrives_on,
+                       departs_on: departs_on,
                        staff: false,
                        admin: false )
   u.counselors.destroy_all
   UserCounselor.create( user: u, counselor: User.find_by( andrewid: row[2] ) )
   UserCounselor.create( user: u, counselor: User.find_by( andrewid: row[3] ) )
+  UserCounselor.create( user: u, counselor: User.find_by( andrewid: row[4] ) )
+  UserCounselor.create( user: u, counselor: User.find_by( andrewid: row[5] ) )
 
   # Add Prekies to Checkins
-  building_checkin.checkin_sessions.each do |t|
+  dorm_key = dorm == "Mudge" ? "mudge" : "morewood"
+  building_checkin.checkin_sessions.where(key: dorm_key).where("check_in_by > ? and check_in_by < ?", arrives_on, departs_on).each do |t|
     CheckinUser.create( checkin_session: t, user: u )
   end
   floor_checkin.checkin_sessions.where(key: floor_key).each do |t|
