@@ -53,7 +53,7 @@ set :bundle_binstubs, -> { shared_path.join('bin') }
 
 # Find the passenger binary
 # TODO: remove hardcoded ruby; rvm1 hook not respected
-set :passenger_environment_variables, { :path => [shared_path.join('bin'), '/home/deploy/.rvm/rubies/ruby-2.2.0/bin/'].join(':') }
+set :passenger_environment_variables, { :path => [shared_path.join('bin'), '/home/deploy/.rvm/rubies/ruby-2.3.1/bin/'].join(':') }
 
 # Butcher restart into working
 # TODO: un-gross. ; is to escape the env.
