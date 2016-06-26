@@ -1,3 +1,134 @@
+#checkin-session-wrapper {
+
+    #checkin-users-nav a { z-index: 99;}
+
+    .bootstrap-table {
+        position: relative;
+        top: -34px;
+        z-index: 98;
+
+        .fixed-table-toolbar {
+            position: relative;
+            top: -10px;
+        }
+
+        .fixed-table-body {
+            .fixed-table-loading { display: none; }
+
+            th {
+                &:nth-child( 1 ) {
+                    width: 83px;
+                    overflow: hidden;
+                }
+                .sortable {
+                    cursor: pointer;
+
+                    &:after {
+                        margin-left: .4em;
+                        -khtml-opacity:.30;
+                        -moz-opacity:.30;
+                        -ms-filter:"alpha(opacity=30)";
+                        filter:alpha(opacity=30);
+                        opacity:.30;
+                        zoom:1; //ie
+
+                        font-family: FontAwesome;
+                        float: right;
+                        font-weight: normal;
+                    }
+                    &.both:after { content: "\f0dc"; }
+                    &.asc:after { content: "\f0de"; }
+                    &.desc:after { content: "\f0dd"; }
+                }
+            }
+
+            tr {
+                &:not(.detail-view) {
+                    td {
+                        &:first-child:before {
+                            -khtml-opacity:.30;
+                            -moz-opacity:.30;
+                            -ms-filter:"alpha(opacity=30)";
+                            filter:alpha(opacity=30);
+                            opacity:.30;
+                            zoom:1; //ie
+                            content: "\f0da";
+                            font-family: FontAwesome;
+                            font-weight: normal;
+
+                            left: 0;
+                            position: absolute;
+                            margin-left: 10px;
+                        }
+                        &:first-child{ padding-left: 5px; }
+                    }
+                    &.detail-view-parent {
+                        td:first-child:before {
+                            content: "\f0d7";
+                            -khtml-opacity:1;
+                            -moz-opacity:1;
+                            -ms-filter:"alpha(opacity=100)";
+                            filter:alpha(opacity=100);
+                            opacity:1;
+                        }
+                    }
+                }
+
+                &.detail-view,
+                &.detail-view-parent {
+
+                    &:hover { background: #fff; }
+                }
+
+                &.detail-view-parent {
+                    span.label { display: none; }
+                }
+
+                &.detail-view {
+
+                    button.close {
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                    }
+
+                    td {
+                        border-top: none;
+                        padding: 0;
+                        position: relative;
+                        background: #f5f5f5;
+                        margin-bottom: -1px;
+
+                        &:nth-child(2) {
+                            border-left:4px solid #ccc;
+                            margin-left: -40px
+                        }
+
+                        & > div {
+                            padding: 12px 8px 60px 8px;
+                        }
+
+                        div {
+                             display: none;
+                        }
+
+                        &:first-child > div {
+                            top: -34px;
+                            padding-top: 12px
+                        }
+                    }
+                }
+            }
+            td.labels {
+                text-align: right;
+            }
+            td a {
+                color: inherit;
+            }
+        }
+    }
+}
+
 #rapid-checkin-form {
     .result-explanation {
         display: none;
@@ -27,6 +158,6 @@
         border-top-left-radius: 0;
         height: 4px;
         margin: 0 -25px -24px -25px;
-        
+
     }
 }

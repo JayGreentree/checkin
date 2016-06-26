@@ -1,7 +1,8 @@
 <tr class="<%= checkin_table_row_classes( checkin ) %>">
-    <td>
+
+    <td class="labels">
         <% if checkin.late? %>
-            <span class="label label-warning">Late</span>
+            <span class="label label-danger">Late</span>
         <% end %>
 
         <% if checkin.excused? %>
@@ -14,9 +15,10 @@
     </td>
     <td><%= checkin.user.name %></td>
     <td><%= checkin.user.andrewid %></td>
-    <td><%= checkin.user.dorm %></td>
-    <td><%= checkin.user.room %></td>
-    <td><%= checkin.user.cell_number %></td>
+    <td><%= checkin.user.dorm %> <%= checkin.user.room %></td>
     <td><%= checkin.user.program.label unless checkin.user.program.nil? %></td>
     <td><%= checkin.attendant.nil? ? raw("&mdash;") : checkin.attendant.name %></td>
+    <td><%= checkin.user.cell_number %></td>
+    <td><% checkin.user.counselors.each do |c| %><%= c.name %><br/><% end %></td>
+    <td><% User.where(dorm: checkin.user.dorm, room: checkin.user.room).where.not(id: checkin.user).each do |r| %><%= r.name %> &mdash; <%= r.cell_number %><br/><% end %></td>
 </tr>

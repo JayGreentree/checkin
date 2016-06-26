@@ -38,6 +38,9 @@ gem 'ruby-ldap'
 # CMU Card Service binding
 gem 'rest-client'
 
+# Additional glyphs
+gem 'font-awesome-sass'
+
 group :development do
   # Use Capistrano for deployment
   gem 'rvm1-capistrano3', require: false

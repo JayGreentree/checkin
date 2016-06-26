@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require modernizr-2.8.3-respond-1.4.2.min
 //= require bootstrap.min
+//= require bootstrap-table
 //= require_tree .
