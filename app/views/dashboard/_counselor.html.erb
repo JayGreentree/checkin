@@ -4,10 +4,10 @@
         <h1>Hello, <%= current_user.given_name %>!</h1>
 
         <% unless @upcoming_checkins.nil? %>
-            <% n = @upcoming_checkins.first %>
+            <% n = @upcoming_checkins.where(key: 'mudge').first %>
             <% p = @past_checkins.first unless @past_checkins.nil? %>
             <p>
-                Looks like your next checkin is the <%= n.label %> <%= n.checkin_session_type.label %> checkin.
+                Mudge <%= n.label %> <%= n.checkin_session_type.label %> checkin.
             </p>
             <p>
                 Students must check in by <strong><%= n.check_in_by.to_s(:time) %></strong> or
@@ -16,6 +16,20 @@
             <p>
                 <%= link_to( raw("Go to #{n.checkin_session_type.label} Checkin &raquo;" ),
                             rapid_checkin_url(n), class: "btn btn-primary btn-lg", role: "button" ) %>
+            </p>
+            <hr/>
+            <% m = @upcoming_checkins.where(key: 'morewood').first %>
+            
+            <p>
+                Morewood <%= m.label %> <%=m.checkin_session_type.label %> checkin.
+            </p>
+            <p>
+                Students must check in by <strong><%= m.check_in_by.to_s(:time) %></strong> or
+                they are considered late.
+            </p>
+            <p>
+                <%= link_to( raw("Go to #{n.checkin_session_type.label} Checkin &raquo;" ),
+                            rapid_checkin_url(m), class: "btn btn-primary btn-lg", role: "button" ) %>
             </p>
             <p>
                 <% unless p.nil? %>
