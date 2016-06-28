@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    Array.[](ldap_reference["cn"]).flatten.last
+   self.name_cache || Array.[](ldap_reference["cn"]).flatten.last
   end
 
   def given_name
