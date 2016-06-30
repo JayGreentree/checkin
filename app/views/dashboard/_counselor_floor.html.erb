@@ -6,14 +6,18 @@
         </p>
         <p><%= link_to raw("See All Floor Checkins &raquo;"), checkins_url(type: "floor"), class: "btn btn-default", role: "button" %></p>
     <% else %>
-        <h2><%= checkin.checkin_session_type.label %> <%= checkin.key %> Checkin</h2>
+        <h2><%= checkin.checkin_session_type.label %> <%#= checkin.key %> Checkin</h2>
         <p>
             Your next <%= checkin.checkin_session_type.label %> checkin is for <%= checkin.label %>.
             Students must check in by <strong><%= checkin.check_in_by.to_s(:time) %></strong> or
             they are considered late.
         </p>
         <p>
-            <%= link_to( raw("Go to Floor Checkin &raquo;"),
-                         rapid_checkin_url(checkin), class: "btn btn-primary", role: "button" ) %></p>
+            <%#= link_to( "Go to Floor " + raw(" Checkin &raquo;"),
+            rapid_checkin_url(checkin), class: "btn btn-primary", role: "button" ) %></p>
+
+        <% CheckinSession.today.where(checkin_session_type: CheckinSessionType.find_by_key("floor")).each do |c| %>
+            <p><%= link_to( c.label, rapid_checkin_url(c)) %></p>
+        <% end %>
     <% end %>
 </div>
