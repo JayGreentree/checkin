@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include SessionsHelper
 
-  before_filter :require_authentication
+  before_action :require_authentication
 
   private
   def require_authentication

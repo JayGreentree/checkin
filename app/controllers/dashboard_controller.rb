@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  skip_before_filter :require_authentication
+  skip_before_action :require_authentication
   
   def index
 

@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
-  skip_before_filter :require_authentication
-  before_filter :require_andrew_realm, :only => :create
+  skip_before_action :require_authentication
+  before_action :require_andrew_realm, :only => :create
 
   ###
   # Login the user
